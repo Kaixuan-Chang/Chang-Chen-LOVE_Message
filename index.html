@@ -164,7 +164,7 @@ let intervalId;
 
 // 检测设备类型，移动设备优化性能
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-const popupInterval = isMobile ? 350 : 300; // 电脑端也稍微降低速度
+const popupInterval = isMobile ? 350 : 250; // 移动设备降低生成速度
 const maxWidth = isMobile ? Math.min(200, window.innerWidth * 0.7) : 240;
 
 // 创建背景音乐 - 韦礼安《如果可以》
@@ -173,34 +173,10 @@ bgMusic.src = "韦礼安 - 如果可以.mp3";
 bgMusic.loop = true;
 bgMusic.volume = 0.4;
 bgMusic.preload = "auto";
-// 添加缓冲处理，避免卡顿
-bgMusic.addEventListener('waiting', function() {
-    console.log('音乐缓冲中...');
-});
-bgMusic.addEventListener('canplaythrough', function() {
-    console.log('音乐加载完成');
-});
-// 防止因网络问题导致音乐停止
-bgMusic.addEventListener('stalled', function() {
-    console.log('音乐加载停滞，尝试继续...');
-    bgMusic.load();
-});
-bgMusic.addEventListener('error', function(e) {
-    console.log('音乐加载错误:', e);
-});
 
 function startMessages(){
     // 点击按钮时立即播放音乐
-    bgMusic.play().then(() => {
-        console.log('音乐开始播放');
-    }).catch(e => {
-        console.log("音乐播放失败:", e);
-        // 如果失败，尝试重新加载
-        setTimeout(() => {
-            bgMusic.load();
-            bgMusic.play();
-        }, 1000);
-    });
+    bgMusic.play().catch(e => console.log("音乐播放失败:", e));
     // 然后显示内容
     document.getElementById("start").style.display = "none";
     intervalId = setInterval(createPopup, popupInterval);

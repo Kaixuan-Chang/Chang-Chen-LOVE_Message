@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>有些话想对你说</title>
+<style>
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+    font-family:"微软雅黑", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(270deg,#ffd6e7,#ffeef5,#fff6fb,#ffe0f0);
+    background-size:600% 600%;
+    animation: gradientMove 12s ease infinite;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* 背景渐变流动 */
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* 中心呼吸卡片 */
+.centerBox{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+    color:#ff4d88;
+    animation: breathe 3s ease-in-out infinite;
+    padding:20px;
+    max-width:90%;
+    box-sizing:border-box;
+}
+
+.centerBox h2{
+    font-size:clamp(24px, 5vw, 32px);
+    margin:0 0 15px 0;
+}
+
+.centerBox p{
+    font-size:clamp(16px, 3.5vw, 18px);
+    margin:0;
+}
+
+/* 呼吸动画 */
+@keyframes breathe{
+    0%{transform:translate(-50%,-50%) scale(1);}
+    50%{transform:translate(-50%,-50%) scale(1.05);}
+    100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+/* 按钮 */
+button{
+    margin-top:25px;
+    padding:12px 28px;
+    font-size:clamp(14px, 3vw, 16px);
+    border:none;
+    border-radius:25px;
+    background:#ff85a2;
+    color:white;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(255,105,180,0.3);
+    transition:0.3s;
+    animation: buttonPulse 2s infinite;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-width:120px;
+}
+
+/* 按钮轻微呼吸 */
+@keyframes buttonPulse{
+    0%{box-shadow:0 0 10px rgba(255,105,180,0.4);}
+    50%{box-shadow:0 0 25px rgba(255,105,180,0.7);}
+    100%{box-shadow:0 0 10px rgba(255,105,180,0.4);}
+}
+
+button:hover{
+    background:#ff5c8a;
+    transform:scale(1.08);
+}
+
+/* 弹窗 */
+.popup{
+    position:absolute;
+    background: rgba(255,255,255,0.92);
+    color:#ff4d88;
+    padding:clamp(10px, 2vw, 14px) clamp(16px, 3vw, 22px);
+    border-radius:16px;
+    box-shadow:0 8px 25px rgba(255,105,180,0.25);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    animation: fadeIn 0.4s ease, float 4s ease-in-out infinite;
+    user-select:none;
+    -webkit-user-select:none;
+    font-size:clamp(14px, 3vw, 16px);
+    max-width:min(240px, 80vw);
+    text-align:center;
+    pointer-events:none;
+    will-change: transform;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(0.8);}
+    to{opacity:1;transform:scale(1);}
+}
+
+@keyframes float{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0px);}
+}
+</style>
+</head>
+<body>
+
+<!-- 初始界面 -->
+<div id="start" class="centerBox">
+    <h2>Hi，程走柳，</h2>
+    <p>有个人，在我这里给你留了些话。</p>
+    <button onclick="startMessages()">点击查看</button>
+</div>
+
+<script>
+const messages = [
+    "程走柳，鸡蛋在冰箱的第二层，牛奶在冰箱的第三层，荔枝在冰箱的第四层",
+    "程走柳，天地之宽，出路万万千，只是没有我了",
+    "程走柳，我爱你",
+    "我想再跟你来一场真正的老牌约会",
+    "带着我的那一份好好活下去",
+    "贝姬，我们共同的频道",
+    "程走柳，别把自己困在过去",
+    "你的正面负面我都喜欢",
+    "程走柳，你要玩我，就玩我一辈子",
+    "程走柳，你要接近我，就不要突然不接近",
+    "程走柳，生辰快乐",
+    "程走柳，我蒋伯驾，身无长物，烂人真心，唯有贱命一条，价值千金，赠予程小姐做生辰贺礼",
+    "程走柳，不要睡在浴缸里了，会感冒的",
+    "程走柳，不要再走进鳄鱼池了，这一次，没人能在保护你了",
+    "程走柳，出门记得看天气预报，下雨了记得打伞",
+    "程走柳，我要你承认，你对我自始至终只是利用，你从来没有爱过我",
+    "程走柳，我想你了",
+    "程走柳，好想，再跟你跳一次舞",
+    "程走柳，我能听到我想听的答案吗？",
+    "蒋生官仔骨骨，最适合危情共舞",
+    "我TM这辈子最见不得你掉眼泪！",
+    "程走柳，我对你毫无办法"
+];
+
+let maxPopups = 300;
+let count = 0;
+let index = 0;
+let intervalId;
+
+// 检测设备类型，移动设备优化性能
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const popupInterval = isMobile ? 350 : 250;
+const maxWidth = isMobile ? Math.min(200, window.innerWidth * 0.7) : 240;
+
+// 创建背景音乐 - 韦礼安《如果可以》
+const bgMusic = new Audio();
+bgMusic.src = "韦礼安 - 如果可以.mp3";
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
+bgMusic.preload = "auto";
+
+function startMessages(){
+    bgMusic.play().catch(e => console.log("音乐播放失败:", e));
+    document.getElementById("start").style.display = "none";
+    intervalId = setInterval(createPopup, popupInterval);
+}
+
+function createPopup(){
+    if(count >= maxPopups){
+        clearInterval(intervalId);
+        return;
+    }
+
+    const popup = document.createElement("div");
+    popup.className = "popup";
+    popup.innerText = messages[index];
+
+    const maxX = window.innerWidth - maxWidth - 20;
+    const maxY = window.innerHeight - 100;
+    
+    const x = Math.max(10, Math.random() * maxX);
+    const y = Math.max(10, Math.random() * maxY);
+
+    popup.style.left = x + "px";
+    popup.style.top = y + "px";
+
+    document.body.appendChild(popup);
+
+    index++;
+    if(index >= messages.length){
+        index = 0;
+    }
+
+    count++;
+    
+    if(isMobile && count % 50 === 0) {
+        const popups = document.querySelectorAll('.popup');
+        if(popups.length > 100) {
+            for(let i = 0; i < 30; i++) {
+                if(popups[i]) popups[i].remove();
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>
